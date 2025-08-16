@@ -1,0 +1,82 @@
+.container {
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.04);
+  --pad-x: 18px;
+  padding: 20px var(--pad-x) 16px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 540px;
+  overflow-y: auto;
+}
+
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+.container::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 8px;
+}
+.container:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 2px;
+}
+
+/* названия дней недели — 7 фиксированных колонок по 40px, как и сетка дат */
+.underscore {
+  border-bottom: 1px solid #e5e7eb;
+  height: 0; /* чтобы не надувать вертикальный размер */
+  margin-left: calc(var(--pad-x) * -1);
+  margin-right: calc(var(--pad-x) * -1);
+  /* можно короче: margin-inline: calc(var(--pad-x) * -1);  (если поддерживается) */
+  margin-top: 8px;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 40px);
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 12px;
+  margin: 6px 0 12px;
+  color: #6b7280;
+  font-size: 12px;
+  text-transform: lowercase;
+}
+.weekday {
+  text-align: center;
+}
+
+.month {
+  margin: 10px 0 18px;
+}
+
+.monthName {
+  font-weight: 600;
+  font-size: 16px;
+  color: #111827;
+  margin: 6px 0 12px 2px;
+}
+
+/* сетка дней — 7 колонок по 40px, ячейки равны размеру .cell */
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 40px);
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* пустая ячейка-заглушка для сдвига начала месяца */
+.emptyCell {
+  width: 40px;
+  height: 40px;
+  visibility: hidden;
+}

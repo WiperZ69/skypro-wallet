@@ -1,0 +1,21 @@
+.container {
+  background: #fff;
+  border-radius: 32px;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.total {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.subtitle {
+  color: #999;
+  font-size: 14px;
+  margin: 4px 0 20px;
+}
