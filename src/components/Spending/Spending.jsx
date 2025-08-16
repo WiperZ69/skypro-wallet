@@ -12,7 +12,7 @@ const Spending = () => {
     date: new Date("Июль 10, 2024"),
   });
 
-  // НОВОЕ: диапазон дат
+  // НОВОЕ: диапазон дат/
   const [selectedRange, setSelectedRange] = useState({
     startDate: null,
     endDate: null,
