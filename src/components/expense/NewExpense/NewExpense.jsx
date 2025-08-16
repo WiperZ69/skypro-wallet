@@ -1,23 +1,16 @@
-import {
-	Car,
-	Film,
-	GraduationCap,
-	Home,
-	PlusCircle,
-	Utensils,
-} from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { ExpenseContext } from '../../../provider/ExpenseProvider'
 import Button from '../../ui/Button/Button'
+import { Icons } from '../../ui/Icons/Icons'
 import styles from './NewExpense.module.scss'
 
 const CATEGORIES = [
-	{ value: 'food', label: 'Еда', Icon: Utensils },
-	{ value: 'transport', label: 'Транспорт', Icon: Car },
-	{ value: 'housing', label: 'Жилье', Icon: Home },
-	{ value: 'joy', label: 'Развлечения', Icon: Film },
-	{ value: 'education', label: 'Образование', Icon: GraduationCap },
-	{ value: 'others', label: 'Другое', Icon: PlusCircle },
+	{ value: 'food', label: 'Еда', Icon: 'food' },
+	{ value: 'transport', label: 'Транспорт', Icon: 'transport' },
+	{ value: 'housing', label: 'Жилье', Icon: 'housing' },
+	{ value: 'joy', label: 'Развлечения', Icon: 'joy' },
+	{ value: 'education', label: 'Образование', Icon: 'education' },
+	{ value: 'others', label: 'Другое', Icon: 'others' },
 ]
 
 const toApiDate = yyyyMMdd => {
@@ -104,7 +97,7 @@ export const NewExpense = () => {
 					id='description'
 					value={description}
 					onChange={e => setDescription(e.target.value)}
-					placeholder='Введите описание (минимум 4 символа)'
+					placeholder='Введите описание'
 					className={styles.input}
 				/>
 			</div>
@@ -119,7 +112,8 @@ export const NewExpense = () => {
 							type='button'
 							className={`${styles.categoryButton} ${category === value ? styles.active : ''}`}
 						>
-							<Icon size={16} /> {label}
+							<Icons name={Icon} className={styles.categoryIcons} />
+							{label}
 						</button>
 					))}
 				</div>
