@@ -10,12 +10,10 @@ export const Expense = () => {
 	return (
 		<div className={styles.expense}>
 			<h1 className={styles.title}>Мои расходы</h1>
-
-			{loading && <p>Загрузка...</p>}
 			{error && <p className={styles.error}>{error}</p>}
 
 			<div className={styles.content}>
-				<ExpenseTable />
+				<ExpenseTable loading={loading} />
 				<NewExpense />
 			</div>
 		</div>

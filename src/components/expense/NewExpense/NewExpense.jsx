@@ -149,7 +149,7 @@ export const NewExpense = () => {
 					onChange={e => setSum(e.target.value)}
 					placeholder='Введите сумму'
 					min='0'
-					step='0.01'
+					step='1'
 					className={styles.input}
 				/>
 			</div>
