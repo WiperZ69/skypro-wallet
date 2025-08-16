@@ -41,24 +41,15 @@ export default function Calendar({ onSelect, onRangeSelect }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  // Тот же список месяцев, что и в walletbase
-  const months = useMemo(
-    () =>
-      [
-        { name: "Июль 2024", days: 31 },
-        { name: "Август 2024", days: 31 },
-        { name: "Сентябрь 2024", days: 30 },
-        { name: "Октябрь 2024", days: 31 },
-        { name: "Ноябрь 2024", days: 30 },
-        { name: "Декабрь 2024", days: 31 },
-      ].map(({ name, days }) => {
-        const [mn, y] = name.split(" ");
-        const monthIndex = RU_MONTHS.indexOf(mn);
-        const year = parseInt(y, 10);
-        return { name, days, monthIndex, year };
-      }),
-    []
-  );
+  // 🔹 Генерируем 12 месяцев для ТЕКУЩЕГО ГОДА (обновится сам при смене года)
+  const currentYear = new Date().getFullYear();
+  const months = useMemo(() => {
+    return Array.from({ length: 12 }, (_, monthIndex) => {
+      const days = new Date(currentYear, monthIndex + 1, 0).getDate();
+      const name = `${RU_MONTHS[monthIndex]} ${currentYear}`;
+      return { name, days, monthIndex, year: currentYear };
+    });
+  }, [currentYear]);
 
   const emitSingle = (dateObj) => {
     // одиночная дата наверх
