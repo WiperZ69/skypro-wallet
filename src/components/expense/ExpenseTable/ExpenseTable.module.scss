@@ -1,86 +1,116 @@
 .container {
-	background-color: white;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-	padding: 1.5rem;
-	border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  border-radius: 30px;
+  position: relative; // Добавить!
 }
 
 .title {
-	font-size: 1.25rem;
-	font-weight: bold;
-	margin-bottom: 1rem;
+  font-family: Montserrat;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  padding-bottom: 32px;
 }
 
 .filters {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 1rem;
-	flex-wrap: wrap;
-	gap: 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .filterGroup {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .select {
-	border: 1px solid #d1d5db;
-	padding: 0.25rem;
-	border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 0.25rem;
+  border-radius: 6px;
 
-	&:focus {
-		outline: none;
-		border-color: #10b981;
-	}
+  &:focus {
+    outline: none;
+    border-color: #10b981;
+  }
 }
 
 .tableContainer {
-	overflow-x: auto;
+  overflow-x: auto;
+  padding-bottom: 32px;
+  margin-left: -15px;
 }
-
+.tableContainer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 114px; // Отступ от верха подогнать! (например, после заголовка и фильтров)
+  height: 1px;
+  background: #e5e7eb;
+  z-index: 2;
+}
 .table {
-	width: 100%;
-	border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .th {
-	text-align: left;
-	padding: 0.5rem 1rem;
-	font-weight: 500;
-	color: #6b7280;
-	border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  color: #6b7280;
+
+  font-family: Montserrat;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 .td {
-	padding: 0.75rem 1rem;
-	border-bottom: 1px solid #f3f4f6;
+  padding: 0.75rem 1rem;
+
+  font-family: Montserrat;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  vertical-align: middle;
 }
 
 .tr {
-	&:hover {
-		background-color: #f9fafb;
-		transition: background-color 0.2s ease-in-out;
-	}
+  &:hover {
+    background-color: #f9fafb;
+    transition: background-color 0.2s ease-in-out;
+  }
 }
-
 .actions {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .actionButton {
-	background: none;
-	border: none;
-	cursor: pointer;
-	padding: 0.25rem;
-	border-radius: 0.25rem;
-	color: #6b7280;
-
-	&:hover {
-		color: #1f2937;
-		background-color: #f3f4f6;
-	}
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  color: #6b7280;
+  position: relative;
+  left: 20px;
+  &:hover {
+    color: #1f2937;
+    background-color: #f3f4f6;
+  }
 }
