@@ -1,5 +1,4 @@
-// ExpensesChart.jsx — одна дата ИЛИ диапазон (CSS Modules + Recharts)
-import React, { useMemo } from "react";
+import React, { useMemo, useContext } from "react";
 import {
   BarChart,
   Bar,
@@ -12,52 +11,16 @@ import {
   Cell,
 } from "recharts";
 import styles from "./ExpensesChart.module.scss";
+import { ExpenseContext } from "../../../provider/ExpenseProvider"; // путь из src/components/expense/ExpensesChart/...
 
-// ---- Цвета и категории ----
-const categoryColors = {
-  Еда: "#d9b3ff",
-  Транспорт: "#ffb84d",
-  Жилье: "#66e0ff",
-  Развлечения: "#a6a6ff",
-  Образование: "#ccff33",
-  Другое: "#ffb3b3",
-};
-const categories = Object.keys(categoryColors);
-
-// ---- Моки/генерация ----
-const mockDataByDate = {
-  "10.07.2024": [
-    { name: "Еда", value: 3590, color: "#d9b3ff" },
-    { name: "Транспорт", value: 1835, color: "#ffb84d" },
-    { name: "Жилье", value: 0, color: "#66e0ff" },
-    { name: "Развлечения", value: 1250, color: "#a6a6ff" },
-    { name: "Образование", value: 600, color: "#ccff33" },
-    { name: "Другое", value: 2306, color: "#ffb3b3" },
-  ],
-  "11.07.2024": [
-    { name: "Еда", value: 2400, color: "#d9b3ff" },
-    { name: "Транспорт", value: 900, color: "#ffb84d" },
-    { name: "Жилье", value: 0, color: "#66e0ff" },
-    { name: "Развлечения", value: 3000, color: "#a6a6ff" },
-    { name: "Образование", value: 0, color: "#ccff33" },
-    { name: "Другое", value: 1500, color: "#ffb3b3" },
-  ],
-  "12.07.2024": [
-    { name: "Еда", value: 4100, color: "#d9b3ff" },
-    { name: "Транспорт", value: 1200, color: "#ffb84d" },
-    { name: "Жилье", value: 8500, color: "#66e0ff" },
-    { name: "Развлечения", value: 600, color: "#a6a6ff" },
-    { name: "Образование", value: 950, color: "#ccff33" },
-    { name: "Другое", value: 1800, color: "#ffb3b3" },
-  ],
-  "13.08.2024": [
-    { name: "Еда", value: 3300, color: "#d9b3ff" },
-    { name: "Транспорт", value: 750, color: "#ffb84d" },
-    { name: "Жилье", value: 0, color: "#66e0ff" },
-    { name: "Развлечения", value: 5000, color: "#a6a6ff" },
-    { name: "Образование", value: 2000, color: "#ccff33" },
-    { name: "Другое", value: 1200, color: "#ffb3b3" },
-  ],
+// соответствие ключей API → отображаемые подписи и цвета
+const CATEGORY_META = {
+  food: { name: "Еда", color: "#d9b3ff" },
+  transport: { name: "Транспорт", color: "#ffb84d" },
+  housing: { name: "Жилье", color: "#66e0ff" },
+  joy: { name: "Развлечения", color: "#a6a6ff" },
+  education: { name: "Образование", color: "#ccff33" },
+  others: { name: "Другое", color: "#ffb3b3" },
 };
 
 const RU_MONTHS = [
@@ -97,23 +60,6 @@ const monthIndexFromRu = (name) => {
   return idx >= 0 ? idx : 0;
 };
 
-const formatKeyFromObj = (dateObj) => {
-  if (!dateObj) return null;
-  const { day, month, year } = dateObj;
-  const m = monthIndexFromRu(month) + 1;
-  const dd = String(day).padStart(2, "0");
-  const mm = String(m).padStart(2, "0");
-  return `${dd}.${mm}.${year}`;
-};
-
-const formatRuGenitive = (d) => {
-  const dd = d.getDate();
-  const mm = d.getMonth();
-  const yy = d.getFullYear();
-  return `${dd} ${RU_MONTHS_GEN[mm]} ${yy}`;
-};
-
-// ——— НОРМАЛИЗАЦИЯ ДАТ (приходит Date | строка | число)
 const toDate = (x) => {
   if (!x) return null;
   if (x instanceof Date)
@@ -122,63 +68,20 @@ const toDate = (x) => {
   return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
 };
 
-const enumerateDaysInclusive = (startDate, endDate) => {
-  const arr = [];
-  const s = toDate(startDate),
-    e = toDate(endDate);
-  if (!s || !e) return arr;
-  let cur = new Date(s);
-  while (cur <= e) {
-    arr.push(new Date(cur));
-    cur.setDate(cur.getDate() + 1);
-  }
-  return arr;
-};
+const isSameDay = (d1, d2) =>
+  d1 &&
+  d2 &&
+  d1.getFullYear() === d2.getFullYear() &&
+  d1.getMonth() === d2.getMonth() &&
+  d1.getDate() === d2.getDate();
 
-const generateRandomData = () =>
-  categories.map((name) => {
-    const base =
-      name === "Еда"
-        ? 2000
-        : name === "Транспорт"
-          ? 900
-          : name === "Жилье"
-            ? 3000
-            : name === "Развлечения"
-              ? 1600
-              : name === "Образование"
-                ? 800
-                : 1200;
-    const jitter = Math.floor(Math.random() * base * 0.4);
-    return { name, value: base + jitter, color: categoryColors[name] };
-  });
+const formatRuGenitive = (d) =>
+  `${d.getDate()} ${RU_MONTHS_GEN[d.getMonth()]} ${d.getFullYear()}`;
 
-const getDataForDay = (dateObj) => {
-  const key = `${String(dateObj.getDate()).padStart(2, "0")}.${String(
-    dateObj.getMonth() + 1
-  ).padStart(2, "0")}.${dateObj.getFullYear()}`;
-  return mockDataByDate[key] || generateRandomData();
-};
-
-const sumByCategory = (lists) => {
-  const acc = new Map();
-  lists.forEach((arr) => {
-    (arr || []).forEach(({ name, value, color }) => {
-      const prev = acc.get(name) || {
-        name,
-        value: 0,
-        color: categoryColors[name] || color,
-      };
-      prev.value += value;
-      acc.set(name, prev);
-    });
-  });
-  return Array.from(acc.values());
-};
-
-// ----- Компонент -----
 export default function ExpensesChart({ date, range }) {
-  // нормализованный диапазон
+  const { expenses } = useContext(ExpenseContext);
+
+  // нормализованный диапазон (или null)
   const normRange = useMemo(() => {
     if (!range) return null;
     const s = toDate(range.startDate);
@@ -186,17 +89,26 @@ export default function ExpensesChart({ date, range }) {
     return s && e ? { start: s, end: e } : null;
   }, [range?.startDate, range?.endDate]);
 
-  // данные под график
-  const computed = useMemo(() => {
+  // отфильтрованные транзакции
+  const filtered = useMemo(() => {
+    const items = Array.isArray(expenses) ? expenses : [];
     if (normRange) {
-      const days = enumerateDaysInclusive(normRange.start, normRange.end);
-      const arrays = days.map(getDataForDay);
-      const summed = sumByCategory(arrays);
-      return summed.length ? summed : generateRandomData();
+      return items.filter((t) => {
+        const d = toDate(t.date);
+        return d && d >= normRange.start && d <= normRange.end;
+      });
     }
-    const key = date ? formatKeyFromObj(date) : "10.07.2024";
-    return mockDataByDate[key] || generateRandomData();
+    if (date?.day && date?.month && date?.year) {
+      const target = new Date(
+        Number(date.year),
+        monthIndexFromRu(date.month),
+        Number(date.day)
+      );
+      return items.filter((t) => isSameDay(toDate(t.date), target));
+    }
+    return items; // если ничего не выбрано — весь период
   }, [
+    expenses,
     normRange?.start?.getTime(),
     normRange?.end?.getTime(),
     date?.day,
@@ -204,18 +116,32 @@ export default function ExpensesChart({ date, range }) {
     date?.year,
   ]);
 
-  // подпись под заголовком — как на скрине
+  // агрегируем суммы по категориям API-ключей
+  const computed = useMemo(() => {
+    const acc = new Map(); // key: apiCategory, value: sum
+    for (const t of filtered) {
+      const key = t.category; // 'food' | 'transport' | ...
+      const sum = Number(t.sum) || 0;
+      acc.set(key, (acc.get(key) || 0) + sum);
+    }
+    // превращаем в массив для графика, упорядоченный как в CATEGORY_META
+    return Object.entries(CATEGORY_META).map(([apiKey, meta]) => ({
+      name: meta.name,
+      value: acc.get(apiKey) || 0,
+      color: meta.color,
+    }));
+  }, [filtered]);
+
   const subtitleNode = useMemo(() => {
     if (normRange) {
       return (
         <>
-          Расходы за <strong>{formatRuGenitive(normRange.start)}</strong>
-          {" — "}
+          Расходы за <strong>{formatRuGenitive(normRange.start)}</strong> —{" "}
           <strong>{formatRuGenitive(normRange.end)}</strong>
         </>
       );
     }
-    if (date) {
+    if (date?.day && date?.month && date?.year) {
       const d = new Date(
         Number(date.year),
         monthIndexFromRu(date.month),
@@ -229,7 +155,7 @@ export default function ExpensesChart({ date, range }) {
     }
     return (
       <>
-        Расходы за <strong>10 июля 2024</strong>
+        Расходы за <strong>весь период</strong>
       </>
     );
   }, [
@@ -247,20 +173,20 @@ export default function ExpensesChart({ date, range }) {
       <h2 className={styles.total}>{total.toLocaleString("ru-RU")} ₽</h2>
       <p className={styles.subtitle}>{subtitleNode}</p>
 
-      {/* фиксируем высоту — чтобы ResponsiveContainer точно отрисовался */}
       <ResponsiveContainer width="100%" height={424}>
-        <BarChart data={computed} barCategoryGap="30%">
+        <BarChart data={computed} barCategoryGap="10%">
           <CartesianGrid vertical={false} stroke="#f0f0f0" />
           <XAxis
             dataKey="name"
             tick={{ fontSize: 14 }}
             axisLine={false}
             tickLine={false}
+            interval={0}
           />
-          <YAxis hide domain={[0, (dataMax) => dataMax * 1.1]} />
-          <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={200}>
+          <YAxis hide domain={[0, (max) => max * 1.1]} />
+          <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={220}>
             {computed.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
+              <Cell key={index} fill={entry.color} />
             ))}
             <LabelList
               dataKey="value"
