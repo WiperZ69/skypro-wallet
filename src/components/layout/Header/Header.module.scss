@@ -1,49 +1,49 @@
-@use '/src/assets/styles/variables.scss' as *;
+@use "/src/assets/styles/variables.scss" as *;
 
 .header {
-	background: $header-bg;
-	&__container {
-		max-width: $breakpoint-5xl;
-		margin: 0 auto;
-		padding: 0 clamp(12px, 8.3vw, 160px);
-		height: 64px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-	&__logo {
-		display: flex;
-		align-items: center;
-	}
-	&__links {
-		font-weight: 600;
-		font-size: 14px;
-		line-height: 170%;
-		text-align: center;
-		display: flex;
-		gap: 48px;
-		:hover {
-			color: $primary-color;
-			text-decoration: underline;
-		}
-	}
-	&__image {
-		width: 100%;
-		max-width: 144px;
-	}
-	&__btn {
-		font-weight: 600;
-		font-size: 14px;
-		line-height: 170%;
-		text-align: center;
-		color: $text-color;
-		border: none;
-		outline: none;
-		background: transparent;
-		cursor: pointer;
-		transition: color 200ms;
-		&:hover {
-			color: $primary-color;
-		}
-	}
+  background: $header-bg;
+  &__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(12px, 8.3vw, 160px);
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__logo {
+    display: flex;
+    align-items: center;
+  }
+  &__links {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 170%;
+    text-align: center;
+    display: flex;
+    gap: 48px;
+    :hover {
+      color: $primary-color;
+      text-decoration: underline;
+    }
+  }
+  &__image {
+    width: 100%;
+    max-width: 144px;
+  }
+  &__btn {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 170%;
+    text-align: center;
+    color: $text-color;
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    transition: color 200ms;
+    &:hover {
+      color: $primary-color;
+    }
+  }
 }

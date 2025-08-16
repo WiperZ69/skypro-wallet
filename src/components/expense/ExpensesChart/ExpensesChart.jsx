@@ -184,7 +184,7 @@ export default function ExpensesChart({ date, range }) {
             interval={0}
           />
           <YAxis hide domain={[0, (max) => max * 1.1]} />
-          <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={220}>
+          <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={520}>
             {computed.map((entry, index) => (
               <Cell key={index} fill={entry.color} />
             ))}
