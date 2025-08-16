@@ -1,5 +1,5 @@
 // Calendar.jsx — выбор одной даты ИЛИ диапазона (CSS Modules)
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import Day from "../Day/Day";
 import styles from "./Calendar.module.scss";
 
@@ -41,27 +41,19 @@ export default function Calendar({ onSelect, onRangeSelect }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  // Тот же список месяцев, что и в walletbase
-  const months = useMemo(
-    () =>
-      [
-        { name: "Июль 2024", days: 31 },
-        { name: "Август 2024", days: 31 },
-        { name: "Сентябрь 2024", days: 30 },
-        { name: "Октябрь 2024", days: 31 },
-        { name: "Ноябрь 2024", days: 30 },
-        { name: "Декабрь 2024", days: 31 },
-      ].map(({ name, days }) => {
-        const [mn, y] = name.split(" ");
-        const monthIndex = RU_MONTHS.indexOf(mn);
-        const year = parseInt(y, 10);
-        return { name, days, monthIndex, year };
-      }),
-    []
-  );
+  // ссылки на DOM-узлы месяцев, чтобы проскроллить к текущему
+  const monthRefs = useRef([]);
+
+  const currentYear = new Date().getFullYear();
+  const months = useMemo(() => {
+    return Array.from({ length: 12 }, (_, monthIndex) => {
+      const days = new Date(currentYear, monthIndex + 1, 0).getDate();
+      const name = `${RU_MONTHS[monthIndex]} ${currentYear}`;
+      return { name, days, monthIndex, year: currentYear };
+    });
+  }, [currentYear]);
 
   const emitSingle = (dateObj) => {
-    // одиночная дата наверх
     onSelect &&
       onSelect({
         day: dateObj.getDate(),
@@ -69,7 +61,6 @@ export default function Calendar({ onSelect, onRangeSelect }) {
         year: String(dateObj.getFullYear()),
         date: new Date(dateObj),
       });
-    // и сброс диапазона
     onRangeSelect && onRangeSelect({ startDate: dateObj, endDate: null });
   };
 
@@ -79,14 +70,12 @@ export default function Calendar({ onSelect, onRangeSelect }) {
 
   const handleDayClick = (dateObj) => {
     if (!startDate) {
-      // первая точка диапазона / одиночная дата
       setStartDate(dateObj);
       setEndDate(null);
       emitSingle(dateObj);
       return;
     }
     if (startDate && !endDate) {
-      // вторая точка диапазона
       if (dateObj < startDate) {
         setEndDate(startDate);
         setStartDate(dateObj);
@@ -95,17 +84,34 @@ export default function Calendar({ onSelect, onRangeSelect }) {
         setEndDate(dateObj);
         emitRange(startDate, dateObj);
       } else {
-        // клик по той же дате — остаёмся на одиночной
         setEndDate(null);
         emitSingle(dateObj);
       }
       return;
     }
-    // диапазон уже был — начинаем новый с кликнутой даты
     setStartDate(dateObj);
     setEndDate(null);
     emitSingle(dateObj);
   };
+
+  // авто-выбор сегодняшнего дня + авто-скролл к текущему месяцу
+  useEffect(() => {
+    const today = new Date();
+    setStartDate(today);
+    setEndDate(null);
+    emitSingle(today);
+
+    // прокрутка к секции текущего месяца
+    const idx = today.getMonth();
+    const el = monthRefs.current[idx];
+    if (el && typeof el.scrollIntoView === "function") {
+      // делаем после отрисовки, чтобы расчёт высот был корректным
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderMonth = (m) => {
     const first = new Date(m.year, m.monthIndex, 1);
@@ -117,7 +123,11 @@ export default function Calendar({ onSelect, onRangeSelect }) {
     });
 
     return (
-      <div className={styles.month} key={m.name}>
+      <div
+        className={styles.month}
+        key={m.name}
+        ref={(el) => (monthRefs.current[m.monthIndex] = el)}
+      >
         <div className={styles.monthName}>{m.name}</div>
         <div className={styles.daysGrid}>
           {cells.map((d, idx) => {
