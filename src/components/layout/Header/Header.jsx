@@ -13,6 +13,11 @@ export const Header = () => {
 				<Link className={styles.header__logo} to='/'>
 					<img className={styles.header__image} src='/logo.svg' alt='logo' />
 				</Link>
+				<div className={styles.header__links}>
+					<Link to='/'>Мои расходы</Link>
+					<Link to='/spending'>Анализ расходов</Link>
+				</div>
+
 				<button
 					className={styles.header__btn}
 					onClick={() => setIsLogoutOpen(true)}
