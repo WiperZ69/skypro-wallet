@@ -1,6 +1,7 @@
 import { Edit, Trash } from 'lucide-react'
 import { useContext, useMemo } from 'react'
 import { ExpenseContext } from '../../../provider/ExpenseProvider'
+import { Loader } from '../../common/Loader/Loader'
 import styles from './ExpenseTable.module.scss'
 
 const CATEGORY_LABELS = {
@@ -20,7 +21,7 @@ const toDisplayDate = iso => {
 	}
 }
 
-export const ExpenseTable = () => {
+export const ExpenseTable = ({ loading }) => {
 	const { expenses, deleteExpense, setEditingExpense } =
 		useContext(ExpenseContext)
 
@@ -29,10 +30,18 @@ export const ExpenseTable = () => {
 		[expenses]
 	)
 
+	if (loading) {
+		return (
+			<div className={styles.container}>
+				<h2 className={styles.title}>Таблица расходов</h2>
+				<Loader />
+			</div>
+		)
+	}
+
 	return (
 		<div className={styles.container}>
 			<h2 className={styles.title}>Таблица расходов</h2>
-
 			<div className={styles.tableContainer}>
 				<table className={styles.table}>
 					<thead>
