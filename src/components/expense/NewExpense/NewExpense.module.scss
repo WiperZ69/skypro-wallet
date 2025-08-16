@@ -1,25 +1,28 @@
 .container {
-	background-color: white;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-	padding: 1.5rem;
-	border-radius: 0.5rem;
+	background-color: $card-bg;
+	box-shadow: 0 20px 67px -12px rgba(0, 0, 0, 0.13);
+	padding: 32px;
+	border-radius: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
 }
 
 .title {
-	font-size: 1.25rem;
-	font-weight: bold;
-	margin-bottom: 1rem;
+	font-weight: 700;
+	font-size: 24px;
 }
 
 .formGroup {
-	margin-bottom: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 }
 
 .label {
 	display: block;
-	font-size: 0.875rem;
-	font-weight: 500;
-	margin-bottom: 0.25rem;
+	font-weight: 600;
+	font-size: 16px;
 }
 
 .input {
@@ -31,7 +34,7 @@
 
 	&:focus {
 		outline: none;
-		border-color: #10b981;
+		border-color: $primary-color;
 		box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 	}
 }
@@ -39,25 +42,40 @@
 .categoryButtons {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.5rem;
-	margin-top: 0.25rem;
+	gap: 6px;
 }
 
 .categoryButton {
-	padding: 0.5rem 1rem;
-	border-radius: 0.375rem;
-	border: 1px solid #d1d5db;
-	background-color: white;
+	padding: 8px 20px;
+	border-radius: 30px;
+	border: none;
+	background-color: $background-color;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 12px;
 
-	&:hover {
-		background-color: #f9fafb;
+	:hover {
+		color: $primary-color;
+		span svg {
+			fill: $primary-color;
+		}
+	}
+
+	.categoryIcons {
+		:hover {
+			fill: $primary-color;
+		}
+		:active {
+			fill: $primary-color;
+		}
 	}
 
 	&.active {
-		background-color: #e5e7eb;
+		background-color: $primary-bg;
+		color: $primary-color;
+		span svg {
+			fill: $primary-color;
+		}
 	}
 }
