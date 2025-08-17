@@ -1,4 +1,5 @@
 .container {
+	width: 379px;
 	background-color: $card-bg;
 	box-shadow: 0 20px 67px -12px rgba(0, 0, 0, 0.13);
 	padding: 32px;
@@ -6,6 +7,9 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	grid-column: span 2 / span 2;
+	grid-row: span 5 / span 5;
+	grid-column-start: 4;
 }
 
 .title {
@@ -78,3 +82,4 @@
 			fill: $primary-color;
 		}
 	}
+}
