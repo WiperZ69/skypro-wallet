@@ -2,77 +2,67 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-	-webkit-box-shadow: 0 0 0 30px $card-bg inset !important;
-	box-shadow: 0 0 0 30px $card-bg inset !important;
-	-webkit-text-fill-color: $text-color !important;
-	color: $text-color !important;
-	transition: background-color 5000s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0 30px $card-bg inset !important;
+  box-shadow: 0 0 0 30px $card-bg inset !important;
+  -webkit-text-fill-color: $text-color !important;
+  color: $text-color !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 $input-border-error: $danger-color;
 $input-bg-error: $danger-bg;
 .auth__container {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background: $background-color;
-	padding: 40px 16px;
-	box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $background-color;
+  padding: 40px 16px;
+  box-sizing: border-box;
 }
 
 .auth__modal {
-	width: 100%;
-	max-width: 368px;
-	border: 0px solid $secondary-color;
-	border-radius: 30px;
-	padding: 32px 24px;
-	box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
-	background: $card-bg;
-	box-sizing: border-box;
-}
-
-@media (max-width: 480px) {
-	.auth__container {
-		padding: 0;
-	}
-	.auth__modal {
-		border: none;
-		padding: 32px 8px;
-	}
+  width: 100%;
+  max-width: 379px;
+  border: 0px solid $secondary-color;
+  border-radius: 30px;
+  padding: 32px;
+  box-shadow: 0 4px 67px -12px rgba(0, 0, 0, 0.13);
+  background: #ffffff;
+  box-sizing: border-box;
 }
 
 .auth__wrapper {
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-	gap: 20px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .auth__title {
-	font-family: Montserrat;
-	font-weight: 700;
-	font-style: Bold;
-	font-size: 24px;
-	line-height: 100%;
-	letter-spacing: 0px;
-	text-align: center;
-	vertical-align: middle;
+  font-family: Montserrat;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .auth__form {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
 }
 
 .auth__input_wrapper {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 10px;
-	width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
 }
 
 $input-bg-active: #f2eaff; // Если есть свой фиолетовый вариант, можно заменить (пока у тебя нет точной переменной)
@@ -80,93 +70,107 @@ $input-bg-active: #f2eaff; // Если есть свой фиолетовый в
 $input-border-active: $primary-color;
 
 .auth__input {
-	border: 1px solid $secondary-color;
-	border-radius: 8px;
-	padding: 10px;
-	width: 100%;
-	max-width: 250px;
-	font-size: 14px;
-	color: $text-color;
-	background-color: $card-bg;
-	box-sizing: border-box;
-	transition: border 0.2s;
-	&.active-valid {
-		background: $input-bg-active; // специфический цвет, можно добавить переменную если повторяешься
-		border: 1.5px solid $input-border-active;
-	}
+  border: 1px solid $secondary-color;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+  max-width: 313px;
+  font-size: 14px;
+  color: $text-color;
+  background-color: $card-bg;
+  box-sizing: border-box;
+  transition: border 0.2s;
+  &.active-valid {
+    background: $input-bg-active; // специфический цвет, можно добавить переменную если повторяешься
+    border: 1.5px solid $input-border-active;
+  }
 }
 
 .auth__input::placeholder {
-	color: $secondary-color;
+  color: $secondary-color;
 }
 
 .auth__input_error {
-	border: 1.5px solid $input-border-error;
-	background: $input-bg-error;
+  border: 1.5px solid $input-border-error;
+  background: $input-bg-error;
 }
 
 @media (max-width: 480px) {
-	.auth__input {
-		max-width: 100%;
-	}
+  .auth__input {
+    max-width: 100%;
+  }
 }
 
 .auth__button {
-	width: 100%;
-	max-width: 272px;
-	padding: 10px;
-	border-radius: 6px;
-	background: $primary-color;
-	color: $text-secondary;
-	cursor: pointer;
-	border: none;
-	transition: background 0.2s;
-	font-family: Montserrat;
-	font-weight: 600;
-	font-style: SemiBold;
-	font-size: 12px;
-	line-height: 100%;
-	letter-spacing: 0px;
-	text-align: center;
-	vertical-align: middle;
+  width: 100%;
+  max-width: 313px;
+  padding: 10px;
+  border-radius: 6px;
+  background: $primary-color;
+  color: $text-secondary;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+  font-family: Montserrat;
+  font-weight: 600;
+  font-style: SemiBold;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .auth__button[disabled] {
-	background: $secondary-color;
-	cursor: not-allowed;
+  background: $secondary-color;
+  cursor: not-allowed;
 }
 
 .auth__group {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .auth__text {
-	margin: 0;
-	font-size: 14px;
-	text-align: center;
-	color: $secondary-color;
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  color: $secondary-color;
 }
 
 .auth__link {
-	font-size: 14px;
-	text-align: center;
-	color: $secondary-color;
-	text-decoration: underline;
+  font-size: 14px;
+  text-align: center;
+  color: $secondary-color;
+  text-decoration: underline;
 }
 
 .auth__error_text {
-	color: $danger-color;
-	letter-spacing: 0%;
-	font-family: Montserrat;
-	font-weight: 400;
-	font-size: 12px;
-	line-height: 150%;
-	letter-spacing: -1%;
-	text-align: center;
-	margin-top: 0;
-	margin-bottom: 0;
-	max-width: 260px;
+  color: $danger-color;
+  letter-spacing: 0%;
+  font-family: Montserrat;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  letter-spacing: -1%;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 260px;
+}
+@media (max-width: 480px) {
+  .auth__container {
+    padding: 0;
+    background: $card-bg;
+  }
+  .auth__modal {
+    border: none;
+    padding: 32px 8px;
+    box-shadow: none;
+  }
+  .auth__error_text {
+    max-width: 320px;
+  }
 }
