@@ -14,22 +14,28 @@ const CATEGORIES = [
 ]
 
 const toApiDate = yyyyMMdd => {
-	const [y, m, d] = yyyyMMdd.split('-')
-	return `${Number(m)}-${Number(d)}-${y}`
+	try {
+		const [y, m, d] = yyyyMMdd.split('-')
+		return `${Number(m)}-${Number(d)}-${y}`
+	} catch {
+		return null
+	}
 }
 
 const toInputDate = dateStr => {
-	const d = new Date(dateStr)
-	if (!isNaN(d)) {
+	try {
+		const d = new Date(dateStr)
+		if (isNaN(d)) return ''
 		const yyyy = d.getFullYear()
 		const mm = String(d.getMonth() + 1).padStart(2, '0')
 		const dd = String(d.getDate()).padStart(2, '0')
 		return `${yyyy}-${mm}-${dd}`
+	} catch {
+		return ''
 	}
-	return ''
 }
 
-export const NewExpense = () => {
+export const NewExpense = ({ onBack }) => {
 	const {
 		addExpense,
 		editExpense,
@@ -37,13 +43,12 @@ export const NewExpense = () => {
 		clearEditingExpense,
 		loading,
 	} = useContext(ExpenseContext)
-
 	const [description, setDescription] = useState('')
 	const [category, setCategory] = useState('food')
 	const [date, setDate] = useState('')
 	const [sum, setSum] = useState('')
+	const [errors, setErrors] = useState({})
 
-	// Если выбрали расход для редактирования → заполняем форму
 	useEffect(() => {
 		if (editingExpense) {
 			setDescription(editingExpense.description ?? '')
@@ -58,12 +63,26 @@ export const NewExpense = () => {
 		setCategory('food')
 		setDate('')
 		setSum('')
+		setErrors({})
+	}
+
+	const validateForm = () => {
+		const newErrors = {}
+		if (description.trim().length < 4) {
+			newErrors.description = 'Описание должно быть не менее 4 символов'
+		}
+		if (!sum || Number(sum) <= 0) {
+			newErrors.sum = 'Сумма должна быть больше 0'
+		}
+		if (!date) {
+			newErrors.date = 'Выберите дату'
+		}
+		setErrors(newErrors)
+		return Object.keys(newErrors).length === 0
 	}
 
 	const handleSave = async () => {
-		if (description.trim().length < 4) return
-		if (!sum || Number(sum) <= 0) return
-		if (!date) return
+		if (!validateForm()) return
 
 		const payload = {
 			description: description.trim(),
@@ -72,21 +91,52 @@ export const NewExpense = () => {
 			sum: parseFloat(sum),
 		}
 
-		if (editingExpense) {
-			await editExpense(editingExpense._id, payload)
-			clearEditingExpense()
-		} else {
-			await addExpense(payload)
+		if (!payload.date) {
+			setErrors(prev => ({ ...prev, date: 'Неверный формат даты' }))
+			return
 		}
 
-		resetForm()
+		try {
+			if (editingExpense) {
+				await editExpense(editingExpense._id, payload)
+				clearEditingExpense()
+			} else {
+				await addExpense(payload)
+			}
+			resetForm()
+		} catch (error) {
+			setErrors({ form: 'Ошибка при сохранении расхода' })
+		}
 	}
 
 	return (
 		<div className={styles.container}>
-			<h2 className={styles.title}>
-				{editingExpense ? 'Редактировать расход' : 'Новый расход'}
-			</h2>
+			<div className={styles.box}>
+				{onBack && (
+					<button
+						onClick={onBack}
+						className={styles.backButton}
+						aria-label='Вернуться к списку'
+					>
+						<svg
+							width='12'
+							height='12'
+							viewBox='0 0 12 12'
+							fill='none'
+							xmlns='http://www.w3.org/2000/svg'
+						>
+							<path
+								d='M8.44425 0.166748H3.55591C1.43258 0.166748 0.166748 1.43258 0.166748 3.55591V8.43841C0.166748 10.5676 1.43258 11.8334 3.55591 11.8334H8.43841C10.5617 11.8334 11.8276 10.5676 11.8276 8.44425V3.55591C11.8334 1.43258 10.5676 0.166748 8.44425 0.166748ZM9.50008 6.43758H3.55591L5.31175 8.19341C5.48091 8.36258 5.48091 8.64258 5.31175 8.81175C5.22425 8.89925 5.11341 8.94008 5.00258 8.94008C4.89175 8.94008 4.78091 8.89925 4.69341 8.81175L2.19091 6.30925C2.10925 6.22758 2.06258 6.11675 2.06258 6.00008C2.06258 5.88341 2.10925 5.77258 2.19091 5.69091L4.69341 3.18841C4.86258 3.01925 5.14258 3.01925 5.31175 3.18841C5.48091 3.35758 5.48091 3.63758 5.31175 3.80675L3.55591 5.56258H9.50008C9.73925 5.56258 9.93758 5.76091 9.93758 6.00008C9.93758 6.23925 9.73925 6.43758 9.50008 6.43758Z'
+								fill='#999999'
+							/>
+						</svg>
+						Мои расходы
+					</button>
+				)}
+				<h2 className={styles.title}>Новый расход</h2>
+			</div>
+
+			{errors.form && <p className={styles.error}>{errors.form}</p>}
 
 			<div className={styles.formGroup}>
 				<label htmlFor='description' className={styles.label}>
@@ -99,7 +149,15 @@ export const NewExpense = () => {
 					onChange={e => setDescription(e.target.value)}
 					placeholder='Введите описание'
 					className={styles.input}
+					aria-describedby={
+						errors.description ? 'description-error' : undefined
+					}
 				/>
+				{errors.description && (
+					<p id='description-error' className={styles.error}>
+						{errors.description}
+					</p>
+				)}
 			</div>
 
 			<div className={styles.formGroup}>
@@ -111,6 +169,7 @@ export const NewExpense = () => {
 							onClick={() => setCategory(value)}
 							type='button'
 							className={`${styles.categoryButton} ${category === value ? styles.active : ''}`}
+							aria-pressed={category === value}
 						>
 							<Icons
 								name={Icon}
@@ -131,10 +190,15 @@ export const NewExpense = () => {
 					type='date'
 					id='date'
 					value={date}
-					placeholder='Введите дату'
 					onChange={e => setDate(e.target.value)}
 					className={styles.input}
+					aria-describedby={errors.date ? 'date-error' : undefined}
 				/>
+				{errors.date && (
+					<p id='date-error' className={styles.error}>
+						{errors.date}
+					</p>
+				)}
 			</div>
 
 			<div className={styles.formGroup}>
@@ -150,7 +214,13 @@ export const NewExpense = () => {
 					min='0'
 					step='1'
 					className={styles.input}
+					aria-describedby={errors.sum ? 'sum-error' : undefined}
 				/>
+				{errors.sum && (
+					<p id='sum-error' className={styles.error}>
+						{errors.sum}
+					</p>
+				)}
 			</div>
 
 			<div className={styles.buttons}>

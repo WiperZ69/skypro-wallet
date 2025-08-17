@@ -49,10 +49,17 @@
 	&:first-child {
 		background-color: $primary-color;
 		color: $text-secondary;
+		&:hover {
+			background: #dd34fb80;
+		}
 	}
 
 	&:last-child {
 		color: $secondary-color;
 		background: transparent;
+		&:hover {
+			background-color: $primary-color;
+			color: $text-secondary;
+		}
 	}
 }
