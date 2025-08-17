@@ -112,7 +112,11 @@ export const NewExpense = () => {
 							type='button'
 							className={`${styles.categoryButton} ${category === value ? styles.active : ''}`}
 						>
-							<Icons name={Icon} className={styles.categoryIcons} />
+							<Icons
+								name={Icon}
+								className={styles.categoryIcons}
+								fill='currentColor'
+							/>
 							{label}
 						</button>
 					))}
@@ -127,6 +131,7 @@ export const NewExpense = () => {
 					type='date'
 					id='date'
 					value={date}
+					placeholder='Введите дату'
 					onChange={e => setDate(e.target.value)}
 					className={styles.input}
 				/>
@@ -150,23 +155,8 @@ export const NewExpense = () => {
 
 			<div className={styles.buttons}>
 				<Button onClick={handleSave} disabled={loading}>
-					{loading
-						? 'Сохраняем…'
-						: editingExpense
-							? 'Сохранить изменения'
-							: 'Добавить новый расход'}
+					{loading ? 'Сохраняем…' : 'Добавить новый расход'}
 				</Button>
-				{editingExpense && (
-					<Button
-						onClick={() => {
-							clearEditingExpense()
-							resetForm()
-						}}
-						variant='secondary'
-					>
-						Отмена
-					</Button>
-				)}
 			</div>
 		</div>
 	)

@@ -1,6 +1,9 @@
 .layout {
-  margin: 0 auto;
-  max-width: 1440px;
-  background-color: #f4f5f6;
-  padding: 0 clamp(12px, 8.3vw, 160px);
+	margin: 0 auto;
+	max-width: 1440px;
+	background-color: #f4f5f6;
+	padding: 0 clamp(12px, 8.3vw, 160px);
+	@media (max-width: 678px) {
+		padding: 0;
+	}
 }
