@@ -14,6 +14,11 @@
 	border-top-color: $primary-color;
 	border-radius: 50%;
 	animation: spin 1s linear infinite;
+	@media (max-width: 672px) {
+		width: 40px;
+		height: 40px;
+		border: 2.5px solid $secondary-color;
+	}
 }
 
 @keyframes spin {
