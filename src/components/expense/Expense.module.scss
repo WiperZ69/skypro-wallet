@@ -16,6 +16,9 @@
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(5, 1fr);
 	gap: 34px;
+	@media (max-width: 678px) {
+		display: flex;
+	}
 }
 
 @media (min-width: 768px) {
