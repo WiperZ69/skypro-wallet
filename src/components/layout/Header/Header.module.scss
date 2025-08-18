@@ -66,6 +66,11 @@
 		position: relative;
 	}
 }
+
+.is-active {
+	color: $primary-color;
+	text-decoration: underline;
+}
 .switch__caret {
 	display: none;
 }
@@ -185,7 +190,7 @@
 	}
 
 	.is-active {
-		background: #f1ebfd;
+		background: $background-color;
 		color: $primary-color;
 		border-radius: 24px;
 	}

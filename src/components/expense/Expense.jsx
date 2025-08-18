@@ -11,7 +11,6 @@ export const Expense = () => {
 	const { mobileScreen, setMobileScreen } = useMobileScreen()
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 672)
 
-	// Handle window resize
 	useEffect(() => {
 		const handleResize = () => setIsMobile(window.innerWidth <= 672)
 		window.addEventListener('resize', handleResize)
