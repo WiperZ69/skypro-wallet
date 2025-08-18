@@ -1,21 +1,43 @@
 // src/components/Spending/Spending.jsx
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "./Spending.module.scss";
 import Calendar from "../Calendar/Calendar/Calendar";
 import ExpensesChart from "../expense/ExpensesChart/ExpensesChart";
 
 const BREAKPOINT = 672; // как и в расходах
+const MONTHS_RU = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
+
+// конвертируем Date -> объект, который ждёт календарь/чарт
+function buildDateObj(d) {
+  return {
+    day: d.getDate(),
+    month: MONTHS_RU[d.getMonth()],
+    year: String(d.getFullYear()),
+    date: d,
+  };
+}
 
 const Spending = () => {
-  // одиночная дата (как было у тебя)
-  const [selectedDate, setSelectedDate] = useState({
-    day: 10,
-    month: "Июль",
-    year: "2024",
-    date: new Date("Июль 10, 2024"),
-  });
+  const location = useLocation();
 
-  // диапазон дат для графика (может быть null)
+  // по умолчанию — сегодня
+  const [selectedDate, setSelectedDate] = useState(() =>
+    buildDateObj(new Date())
+  );
   const [selectedRange, setSelectedRange] = useState(null);
 
   // определяем мобильный режим
@@ -31,6 +53,17 @@ const Spending = () => {
   // текущий мобильный экран: 'chart' | 'calendar'
   // по умолчанию — график (требование)
   const [mobileView, setMobileView] = useState("chart");
+
+  // При каждом переходе на /spending выбираем сегодняшнюю дату,
+  // сбрасываем диапазон и возвращаемся на экран графика.
+  useEffect(() => {
+    if (location.pathname === "/spending") {
+      const today = buildDateObj(new Date());
+      setSelectedDate(today);
+      setSelectedRange(null);
+      setMobileView("chart");
+    }
+  }, [location.pathname]);
 
   // ----- МОБИЛКА: показываем один из экранов -----
   if (isMobile) {
@@ -83,7 +116,7 @@ const Spending = () => {
           className={styles.switchBtn}
           onClick={() => setMobileView("chart")}
         >
-          Выбрать период
+          Показать график
         </button>
       </div>
     );
