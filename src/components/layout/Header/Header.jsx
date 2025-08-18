@@ -67,8 +67,22 @@ export const Header = () => {
 				{/* ДЕСКТОП: показываем ссылки только для авторизованных пользователей */}
 				{!isAuthPage && user && (
 					<div className={styles.header__links}>
-						<Link to='/'>Мои расходы</Link>
-						<Link to='/spending'>Анализ расходов</Link>
+						<Link
+							className={`${
+								location.pathname === '/' ? styles['is-active'] : ''
+							}`}
+							to='/'
+						>
+							Мои расходы
+						</Link>
+						<Link
+							className={`${
+								location.pathname === '/spending' ? styles['is-active'] : ''
+							}`}
+							to='/spending'
+						>
+							Анализ расходов
+						</Link>
 					</div>
 				)}
 

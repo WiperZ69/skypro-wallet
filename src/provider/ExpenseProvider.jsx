@@ -15,12 +15,11 @@ export const ExpenseProvider = ({ children }) => {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
 	const { user } = useContext(AuthContext)
-	const [editingExpense, setEditingExpense] = useState(null)
-	const clearEditingExpense = () => setEditingExpense(null)
 
 	const fetchExpenses = async () => {
 		try {
 			setLoading(true)
+			setError('')
 			const { data } = await axios.get(WALLET_API_URL, {
 				headers: { Authorization: `Bearer ${getToken()}` },
 			})
@@ -40,28 +39,37 @@ export const ExpenseProvider = ({ children }) => {
 
 	const addExpense = async expense => {
 		try {
-			await axios.post(WALLET_API_URL, expense, {
+			setError('')
+			const { data } = await axios.post(WALLET_API_URL, expense, {
 				headers: {
 					Authorization: `Bearer ${getToken()}`,
 					'Content-Type': '',
 				},
 			})
-			await fetchExpenses()
+			setExpenses(prev => [...prev, data])
+			return data
 		} catch (error) {
-			console.error('Ошибка добавления транзакции:', error.message)
+			const errorMessage = error.response?.data?.error || error.message
+			setError(errorMessage)
+			console.error('Ошибка добавления транзакции:', errorMessage)
+			throw error
 		}
 	}
 
 	const deleteExpense = async id => {
 		try {
+			setError('')
 			await axios.delete(`${WALLET_API_URL}/${id}`, {
 				headers: {
 					Authorization: `Bearer ${getToken()}`,
 				},
 			})
-			await fetchExpenses()
+			setExpenses(prev => prev.filter(expense => expense._id !== id))
 		} catch (error) {
-			console.error('Ошибка при удалении транзакции:', error.message)
+			const errorMessage = error.response?.data?.error || error.message
+			setError(errorMessage)
+			console.error('Ошибка при удалении транзакции:', errorMessage)
+			throw error
 		}
 	}
 
@@ -71,9 +79,6 @@ export const ExpenseProvider = ({ children }) => {
 				expenses,
 				addExpense,
 				deleteExpense,
-				editingExpense,
-				setEditingExpense,
-				clearEditingExpense,
 				loading,
 			}}
 		>
