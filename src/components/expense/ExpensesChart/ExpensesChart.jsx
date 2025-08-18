@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react";
+import React, { useMemo, useContext, useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -78,8 +78,54 @@ const isSameDay = (d1, d2) =>
 const formatRuGenitive = (d) =>
   `${d.getDate()} ${RU_MONTHS_GEN[d.getMonth()]} ${d.getFullYear()}`;
 
+// ---- Респонсивная толщина столбцов (мобилка 52..62 px) ----
+const MIN_BAR_SIZE = 52;
+const MAX_BAR_SIZE = 62;
+const MOBILE_MIN_W = 320;
+const MOBILE_MAX_W = 672;
+
+function useMobileBarSize() {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= MOBILE_MAX_W : false
+  );
+  const [barSize, setBarSize] = useState(MIN_BAR_SIZE);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const calc = () => {
+      const w = window.innerWidth;
+      const mobile = w <= MOBILE_MAX_W;
+      setIsMobile(mobile);
+
+      if (mobile) {
+        const clamped = Math.max(MOBILE_MIN_W, Math.min(w, MOBILE_MAX_W));
+        const t = (clamped - MOBILE_MIN_W) / (MOBILE_MAX_W - MOBILE_MIN_W); // 0..1
+        const px = Math.round(MIN_BAR_SIZE + (MAX_BAR_SIZE - MIN_BAR_SIZE) * t);
+        setBarSize(px); // 52..62
+      } else {
+        setBarSize(undefined); // на десктопе пусть решает Recharts
+      }
+    };
+
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
+  return { isMobile, barSize };
+}
+
+function ellipsize(str, maxChars) {
+  if (!str) return "";
+  return str.length > maxChars ? str.slice(0, maxChars) + "…" : str;
+}
+
 export default function ExpensesChart({ date, range }) {
   const { expenses } = useContext(ExpenseContext);
+
+  // моб. режим + вычисленная толщина столбцов
+  const { isMobile, barSize } = useMobileBarSize();
 
   // нормализованный диапазон (или null)
   const normRange = useMemo(() => {
@@ -118,13 +164,12 @@ export default function ExpensesChart({ date, range }) {
 
   // агрегируем суммы по категориям API-ключей
   const computed = useMemo(() => {
-    const acc = new Map(); // key: apiCategory, value: sum
+    const acc = new Map();
     for (const t of filtered) {
-      const key = t.category; // 'food' | 'transport' | ...
+      const key = t.category;
       const sum = Number(t.sum) || 0;
       acc.set(key, (acc.get(key) || 0) + sum);
     }
-    // превращаем в массив для графика, упорядоченный как в CATEGORY_META
     return Object.entries(CATEGORY_META).map(([apiKey, meta]) => ({
       name: meta.name,
       value: acc.get(apiKey) || 0,
@@ -168,6 +213,15 @@ export default function ExpensesChart({ date, range }) {
 
   const total = computed.reduce((s, x) => s + (x?.value || 0), 0);
 
+  // Жёсткий лимит символов для подписи на мобилке (SVG, css-ellipsis не работает)
+  const maxLabelChars = isMobile
+    ? (barSize || MIN_BAR_SIZE) <= 54
+      ? 5
+      : (barSize || MIN_BAR_SIZE) <= 58
+        ? 6
+        : 7
+    : 99;
+
   return (
     <div className={styles.container}>
       <h2 className={styles.total}>{total.toLocaleString("ru-RU")} ₽</h2>
@@ -178,13 +232,20 @@ export default function ExpensesChart({ date, range }) {
           <CartesianGrid vertical={false} stroke="#f0f0f0" />
           <XAxis
             dataKey="name"
-            tick={{ fontSize: 14 }}
+            tick={{ fontSize: isMobile ? 10 : 14 }}
             axisLine={false}
             tickLine={false}
             interval={0}
+            tickMargin={8}
+            tickFormatter={(v) => (isMobile ? ellipsize(v, maxLabelChars) : v)}
           />
           <YAxis hide domain={[0, (max) => max * 1.1]} />
-          <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={520}>
+          <Bar
+            dataKey="value"
+            radius={[8, 8, 0, 0]}
+            maxBarSize={520}
+            barSize={barSize} // 52..62 px на мобилке, undefined на десктопе
+          >
             {computed.map((entry, index) => (
               <Cell key={index} fill={entry.color} />
             ))}
