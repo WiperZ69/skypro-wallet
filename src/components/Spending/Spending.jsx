@@ -125,7 +125,7 @@ const Spending = () => {
   // ----- ДЕСКТОП: два блока рядом (как было) -----
   return (
     <div>
-      <h1 className={styles.title}>Аналитика расходов</h1>
+      <h1 className={styles.title}>Анализ расходов</h1>
 
       <div className={styles.content}>
         <div className={styles.left}>

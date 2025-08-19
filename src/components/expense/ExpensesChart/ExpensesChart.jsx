@@ -226,46 +226,57 @@ export default function ExpensesChart({ date, range }) {
     <div className={styles.container}>
       <h2 className={styles.total}>{total.toLocaleString("ru-RU")} ₽</h2>
       <p className={styles.subtitle}>{subtitleNode}</p>
-
-      <ResponsiveContainer width="100%" height={424}>
-        <BarChart data={computed} barCategoryGap="10%">
-          <CartesianGrid vertical={false} stroke="#f0f0f0" />
-          <XAxis
-            dataKey="name"
-            tick={{ fontSize: isMobile ? 10 : 14 }}
-            axisLine={false}
-            tickLine={false}
-            interval={0}
-            tickMargin={8}
-            tickFormatter={(v) => (isMobile ? ellipsize(v, maxLabelChars) : v)}
-          />
-          <YAxis hide domain={[0, (max) => max * 1.1]} />
-          <Bar
-            dataKey="value"
-            radius={[8, 8, 0, 0]}
-            maxBarSize={520}
-            barSize={barSize} // 52..62 px на мобилке, undefined на десктопе
-          >
-            {computed.map((entry, index) => (
-              <Cell key={index} fill={entry.color} />
-            ))}
-            <LabelList
-              dataKey="value"
-              position="top"
-              formatter={(v) => `${Number(v).toLocaleString("ru-RU")} ₽`}
-              fill="#000"
-              fontSize={18}
+      <div className={styles.graph__container}>
+        <ResponsiveContainer
+          width="100%"
+          height={424}
+          padding-left="{32px}"
+          padding-right="32px}"
+        >
+          <BarChart data={computed} barCategoryGap="10%">
+            {/* <CartesianGrid vertical={false} stroke="#f0f0f0" /> /// УБРАТЬ!!! */}
+            <XAxis
+              dataKey="name"
+              tick={{ fontSize: isMobile ? 10 : 12 }}
+              axisLine={false}
+              tickLine={false}
+              interval={0}
+              tickMargin={8}
+              tickFormatter={(v) =>
+                isMobile ? ellipsize(v, maxLabelChars) : v
+              }
             />
-          </Bar>
-          <Tooltip
-            formatter={(v) => [
-              `${Number(v).toLocaleString("ru-RU")} ₽`,
-              "Сумма",
-            ]}
-            cursor={{ fill: "rgba(0,0,0,0.04)" }}
-          />
-        </BarChart>
-      </ResponsiveContainer>
+            <YAxis hide domain={[0, (max) => max * 1.1]} />
+            <Bar
+              dataKey="value"
+              radius={[12, 12, 12, 12]}
+              maxBarSize={520}
+              barSize={barSize} // 52..62 px на мобилке, undefined на десктопе
+            >
+              {computed.map((entry, index) => (
+                <Cell key={index} fill={entry.color} />
+              ))}
+              <LabelList
+                dataKey="value"
+                position="top"
+                formatter={(v) => `${Number(v).toLocaleString("ru-RU")} ₽`}
+                fill="#000"
+                fontSize={16}
+                fontWeight={600}
+                fontFamily="Montserrat, Arial, sans-serif"
+                fontStyle="normal"
+              />
+            </Bar>
+            <Tooltip
+              formatter={(v) => [
+                `${Number(v).toLocaleString("ru-RU")} ₽`,
+                "Сумма",
+              ]}
+              cursor={{ fill: "rgba(0,0,0,0.04)" }}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
