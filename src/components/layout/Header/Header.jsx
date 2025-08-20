@@ -6,7 +6,7 @@ import { LogOut } from '../../Modals/LogOut/LogOut'
 import styles from './Header.module.scss'
 
 export const Header = () => {
-	const { updateUserInfo, user } = useContext(AuthContext) // Предполагается, что user доступен
+	const { updateUserInfo, user } = useContext(AuthContext)
 	const { mobileScreen, setMobileScreen } = useMobileScreen()
 	const [isLogoutOpen, setIsLogoutOpen] = useState(false)
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -15,11 +15,9 @@ export const Header = () => {
 	const location = useLocation()
 	const navigate = useNavigate()
 
-	// Проверяем, находится ли пользователь на странице авторизации
 	const isAuthPage =
 		location.pathname === '/sign-in' || location.pathname === '/sign-up'
 
-	// Текущее название страницы для кнопки (для мобильного меню)
 	const currentTitle = isAuthPage
 		? 'Авторизация'
 		: location.pathname.startsWith('/spending')
@@ -28,7 +26,6 @@ export const Header = () => {
 				? 'Мои расходы'
 				: 'Новый расход'
 
-	// Закрытие по клику снаружи
 	useEffect(() => {
 		const onDocClick = e => {
 			if (!isMenuOpen) return
@@ -41,14 +38,12 @@ export const Header = () => {
 		return () => document.removeEventListener('mousedown', onDocClick)
 	}, [isMenuOpen])
 
-	// Закрытие по ESC
 	useEffect(() => {
 		const onEsc = e => e.key === 'Escape' && setIsMenuOpen(false)
 		document.addEventListener('keydown', onEsc)
 		return () => document.removeEventListener('keydown', onEsc)
 	}, [])
 
-	// Закрывать меню при смене маршрута
 	useEffect(() => {
 		setIsMenuOpen(false)
 	}, [location.pathname])
@@ -64,7 +59,6 @@ export const Header = () => {
 					<img className={styles.header__image} src='/logo.svg' alt='logo' />
 				</Link>
 
-				{/* ДЕСКТОП: показываем ссылки только для авторизованных пользователей */}
 				{!isAuthPage && user && (
 					<div className={styles.header__links}>
 						<Link
@@ -86,7 +80,6 @@ export const Header = () => {
 					</div>
 				)}
 
-				{/* МОБИЛЬНЫЙ переключатель */}
 				<div className={styles.header__switch}>
 					<button
 						ref={btnRef}
@@ -218,7 +211,6 @@ export const Header = () => {
 					)}
 				</div>
 
-				{/* ДЕСКТОП: кнопка "Выйти" только для авторизованных пользователей */}
 				{!isAuthPage && user && (
 					<button
 						className={styles.header__btn}
