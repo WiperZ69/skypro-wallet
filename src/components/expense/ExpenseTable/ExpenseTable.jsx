@@ -27,23 +27,20 @@ export const ExpenseTable = ({
 	setSelectedExpense,
 }) => {
 	const { expenses, deleteExpense } = useContext(ExpenseContext)
-	const tableRef = useRef(null) // Ссылка на контейнер таблицы
+	const tableRef = useRef(null)
 
 	const rows = useMemo(
 		() => (Array.isArray(expenses) ? expenses : []),
 		[expenses]
 	)
 
-	// Обработчик кликов для снятия выделения при клике вне строк
 	useEffect(() => {
-		if (!isMobile) return // Работает только на мобильной версии
+		if (!isMobile) return
 
 		const handleClickOutside = event => {
 			if (tableRef.current && !tableRef.current.contains(event.target)) {
-				// Если клик вне контейнера таблицы, снимаем выделение
 				setSelectedExpense(null)
 			} else if (tableRef.current && !event.target.closest(`.${styles.tr}`)) {
-				// Если клик внутри контейнера, но не по строке <tr>, снимаем выделение
 				setSelectedExpense(null)
 			}
 		}
@@ -97,9 +94,9 @@ export const ExpenseTable = ({
 						</tr>
 					</thead>
 					<tbody>
-						{rows.map(expense => (
+						{rows.map((expense, i) => (
 							<tr
-								key={expense._id}
+								key={i}
 								className={`${styles.tr} ${isMobile && selectedExpense === expense._id ? styles.selected : ''}`}
 								onClick={
 									isMobile
