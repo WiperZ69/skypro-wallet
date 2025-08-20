@@ -68,6 +68,10 @@
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(1, 1fr);
 	gap: 32px;
+	:nth-child(3),
+	:nth-child(4) {
+		text-align: end;
+	}
 	@media (max-width: 672px) {
 		margin-left: -16px;
 		padding-left: 16px;
@@ -108,6 +112,14 @@
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(1, 1fr);
 	gap: 32px;
+	margin-left: -32px;
+	padding-left: 32px;
+	margin-right: -32px;
+	padding-right: 32px;
+	:nth-child(3),
+	:nth-child(4) {
+		text-align: end;
+	}
 	&:hover {
 		background-color: $primary-bg;
 		color: $primary-color;
