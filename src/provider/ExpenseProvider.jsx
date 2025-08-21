@@ -46,7 +46,7 @@ export const ExpenseProvider = ({ children }) => {
 					'Content-Type': '',
 				},
 			})
-			setExpenses(data)
+			setExpenses(data.transactions)
 			return data
 		} catch (error) {
 			const errorMessage = error.response?.data?.error || error.message
