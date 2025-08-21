@@ -80,3 +80,9 @@
   height: 40px;
   visibility: hidden;
 }
+
+@media (max-width: 672px) {
+  .daysGrid {
+    gap: 5px;
+  }
+}
