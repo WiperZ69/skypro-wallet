@@ -1,0 +1,144 @@
+.container {
+	width: 379px;
+	background-color: $card-bg;
+	box-shadow: 0 20px 67px -12px rgba(0, 0, 0, 0.13);
+	padding: 32px;
+	border-radius: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	grid-column: span 2 / span 2;
+	grid-row: span 5 / span 5;
+	grid-column-start: 4;
+
+	@media (max-width: 672px) {
+		padding: 16px;
+		width: 100%;
+		border-radius: 0;
+	}
+}
+
+.box {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.backButton {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	outline: none;
+	border: none;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 150%;
+	color: $secondary-color;
+	background-color: transparent;
+}
+.title {
+	font-weight: 700;
+	font-size: 24px;
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.label {
+	display: block;
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.error {
+	color: $danger-color;
+	font-size: 12px;
+}
+
+.input {
+	width: 100%;
+	border: 0.5px solid $secondary-color;
+	padding: 12px;
+	border-radius: 6px;
+	background-color: $card-bg;
+
+	&:focus {
+		outline: none;
+		border-color: $primary-color;
+	}
+}
+
+.categoryButtons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.categoryButton {
+	padding: 8px 20px;
+	border-radius: 30px;
+	border: none;
+	background-color: $background-color;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	color: $text-color;
+	transition: color 0.3s ease;
+
+	&:hover {
+		color: $primary-color;
+
+		.categoryIcons {
+			color: $primary-color;
+		}
+	}
+
+	&.active {
+		background-color: $primary-bg;
+		color: $primary-color;
+
+		.categoryIcons {
+			color: $primary-color;
+		}
+	}
+}
+
+input[type='date'] {
+	outline: none;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+
+	&::-webkit-datetime-edit-text,
+	&::-webkit-datetime-edit-month-field,
+	&::-webkit-datetime-edit-day-field,
+	&::-webkit-datetime-edit-year-field {
+		color: inherit;
+		font-size: 12px;
+		font-weight: normal;
+	}
+
+	&::-webkit-calendar-picker-indicator {
+		filter: invert(70%) sepia(100%) saturate(500%) hue-rotate(-15deg);
+		opacity: 0.7;
+		cursor: pointer;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+
+	&::placeholder {
+		color: #aaa;
+		font-style: italic;
+	}
+
+	&:focus {
+		box-shadow:
+			0 0 0 0.5px $primary-color,
+			0 0 0 4px rgba($primary-color, 0.3);
+	}
+}

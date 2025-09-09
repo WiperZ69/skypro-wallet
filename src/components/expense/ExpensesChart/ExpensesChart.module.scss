@@ -1,0 +1,67 @@
+/* ===== ExpensesChart.module.scss ===== */
+
+:root {
+  --text: #111;
+  --muted: #8f8f8f;
+  --card-bg: #fff;
+}
+
+/* По умолчанию (десктоп) оставляем карточку графика */
+.container {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 2px 18px rgba(17, 17, 17, 0.04);
+}
+
+/* Большая сумма сверху */
+.total {
+  margin: 0 0 8px;
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+/* Подзаголовок «Расходы за …» */
+.subtitle {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 14px;
+
+  strong {
+    font-weight: 700;
+    color: var(--muted);
+  }
+}
+
+/* Обёртка для Recharts */
+.graph__container {
+  width: 100%;
+  height: 424px;
+}
+
+/* ===== Мобилка: график без «карточки», как в макете ===== */
+@media (max-width: 672px) {
+  .container {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0; /* убираем внутренние отступы у «карточки» */
+  }
+
+  .total {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .graph__container {
+    height: 420px; /* чтобы график не «лип» к кнопке снизу */
+  }
+}

@@ -1,0 +1,39 @@
+.cell {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #eff1f5; /* базовый фон пустой клетки */
+  color: #6b7280; /* базовый цвет текста */
+  font-size: 14px;
+  user-select: none;
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.cell:hover {
+  transform: scale(1.04);
+}
+
+/* активная одиночная дата */
+.active {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+/* капсула: края диапазона выделяем контуром */
+.rangeStart,
+.rangeEnd {
+  outline: 2px solid #7c3aed;
+}
+
+/* середина диапазона — мягкий фон */
+.rangeMiddle {
+  background: #ede9fe;
+  color: #7c3aed;
+}

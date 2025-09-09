@@ -1,0 +1,159 @@
+/* ======= Spending.module.scss (полная версия) ======= */
+
+/* Контейнер страницы */
+.wrapper {
+  width: 100%;
+}
+
+/* Заголовок страницы */
+.title {
+  margin: 0 0 20px;
+  font-size: 36px;
+  line-height: 1.2;
+  font-weight: 800;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+/* Основная область: календарь слева, график справа */
+.content {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+}
+
+/* Левая колонка (календарь) */
+.left {
+  /* стили при необходимости */
+}
+
+/* Правая колонка (график) */
+.right {
+  /* стили при необходимости */
+}
+
+/* Маркерные классы для мобильного управления показом/скрытием */
+.mobileBlock {
+  /* по умолчанию ничего не делаем, используется только как хук */
+}
+
+/* ВАЖНО: на десктопе .hiddenMob НИЧЕГО НЕ СКРЫВАЕТ.
+   Скрытие включается только в мобильной медиа-зоне ниже. */
+.hiddenMob {
+}
+
+/* Панель мобильных переключателей (на десктопе скрыта) */
+.mobileControls {
+  display: none;
+  margin-top: 32px;
+}
+
+/* Кнопка-переключатель мобильных блоков */
+.switchBtn {
+  appearance: none;
+  width: 100%;
+  height: 54px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding-inline: 16px;
+  border: 0;
+  border-radius: 12px;
+
+  background: var(--accent);
+  color: #fff;
+
+  font:
+    700 14px/1 "Montserrat",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+
+  box-shadow: 0 6px 20px rgba(123, 97, 255, 0.35);
+  cursor: pointer;
+  transition:
+    transform 0.06s ease,
+    filter 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.03);
+  }
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 14px rgba(123, 97, 255, 0.28);
+  }
+}
+
+/* ======= Мобильная зона: только стилями, без JS-хуков ======= */
+@media (max-width: 672px) {
+  :root {
+    --colog-bg: #ffffff;
+    --accent: #7b61ff;
+    --sticky-btn-h: 54px; /* высота .switchBtn */
+    --sticky-pad: 16px; /* вертикальные паддинги .mobileControls */
+  }
+  .wrapper {
+    background-color: #fff;
+    width: min(100% - 32px, 1200px);
+    margin-inline: auto;
+  }
+
+  .title {
+    margin-top: 0;
+    padding-top: 24px;
+    font-size: 24px;
+  }
+  /* Колонки складываем в одну, но в DOM остаются обе —
+     видимость управляем классом .hiddenMob */
+  .content {
+    display: block;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+  }
+
+  /* Универсальный класс, который реально скрывает блоки ТОЛЬКО на мобилке */
+  .hiddenMob {
+    display: none !important;
+  }
+
+  /* Показываем мобильные кнопки-переключатели */
+  .mobileControls {
+    display: block;
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    margin-left: -16px;
+    margin-right: -16px;
+    background: #fff;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+
+    box-shadow: 0 -10px 24px rgba(17, 17, 17, 0.06);
+  }
+  .hiddenMob {
+    display: none !important;
+  }
+
+  .left {
+    padding-bottom: calc(
+      var(--sticky-btn-h) + var(--sticky-pad) * 2 +
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
+  .right {
+    padding-bottom: calc(
+      var(--sticky-btn-h) + var(--sticky-pad) * 2 +
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
+}

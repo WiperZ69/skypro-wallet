@@ -1,0 +1,207 @@
+@use "/src/assets/styles/variables.scss" as *;
+
+.header {
+  background: $header-bg;
+  @media (max-width: 672px) {
+    background: $background-color;
+  }
+
+  &__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(12px, 8.3vw, 160px);
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+  }
+
+  &__links {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 170%;
+    text-align: center;
+    display: flex;
+    gap: 48px;
+
+    :hover {
+      color: $primary-color;
+      text-decoration: underline;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    max-width: 100px;
+  }
+  &__exit {
+    display: none;
+  }
+
+  &__btn {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 170%;
+    text-align: center;
+    color: $text-color;
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    transition: color 200ms;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  /* контейнер под мобильный переключатель (по умолчанию скрыт) */
+  &__switch {
+    display: none;
+    position: relative;
+  }
+}
+
+.is-active {
+  color: $primary-color;
+  text-decoration: underline;
+}
+.switch__caret {
+  display: none;
+}
+/* ---------- только мобильная версия (ориентир на 375px) ---------- */
+@media (max-width: 672px) {
+  .header {
+    &__container {
+      padding: 0 16px;
+      height: 56px;
+      gap: 8px;
+    }
+
+    /* прячем десктопные ссылки */
+    &__links {
+      display: none;
+    }
+
+    /* показываем мобильный переключатель */
+    &__switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      max-width: 240px;
+    }
+
+    &__image {
+      max-width: 109px;
+    }
+
+    &__btn {
+      display: none;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    &__exit {
+      display: block;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 170%;
+      text-align: center;
+      color: $text-color;
+      border: none;
+      outline: none;
+      background: transparent;
+      cursor: pointer;
+      transition: color 200ms;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+
+  /* элементы мобильного переключателя */
+  .switch__btn {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1;
+    color: $text-color;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+
+    &:hover {
+      color: #7334ea;
+      text-decoration: underline;
+    }
+
+    &[aria-expanded="true"] {
+      color: #7334ea;
+      text-decoration: underline;
+    }
+  }
+
+  .switch__menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 65px;
+    width: 138px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.1),
+      0 4px 10px rgba(0, 0, 0, 0.06);
+    padding: 10px;
+    z-index: 20;
+    border: 0.5px solid #999;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .switch__item {
+    width: 100%;
+    height: 40px;
+    border: 0;
+    background: #f4f5f6;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 12px;
+    color: $text-color;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .is-active {
+    background: #f1ebfd;
+    color: $primary-color;
+    border-radius: 24px;
+  }
+
+  .switch__caret {
+    display: inline-block;
+    transform: translateY(1px);
+    color: black;
+    text-decoration: none;
+    margin-right: 10px;
+    margin-left: -8px;
+  }
+}

@@ -1,0 +1,80 @@
+.expense {
+	max-width: $breakpoint-5xl;
+	margin: 0 auto;
+}
+.link {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 150%;
+	outline: none;
+	border: none;
+	background: transparent;
+}
+.title {
+	font-size: 32px;
+	font-weight: 700;
+	padding-bottom: 32px;
+	padding-top: 36px;
+	color: $text-color;
+	@media (max-width: 672px) {
+		background-color: $card-bg;
+		font-size: 24px;
+		padding-top: 22px;
+		padding-bottom: 24px;
+	}
+}
+
+.content {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+	gap: 34px;
+	@media (max-width: 672px) {
+		display: flex;
+	}
+}
+
+@media (min-width: 768px) {
+	.content {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+@media (max-width: 672px) {
+	.box {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: $card-bg;
+		padding: 0 16px;
+	}
+	.deleteButton {
+		position: fixed;
+		bottom: 24px;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		width: 90vw;
+		padding: 12px;
+		background: $primary-color;
+		color: $text-secondary;
+		font-weight: 700;
+		font-size: 12px;
+		border: none;
+		border-radius: 6px;
+		z-index: 100;
+		display: block;
+		transition: 0.2s;
+	}
+	.deleteButton:disabled,
+	.deleteButton[disabled] {
+		background: #cdcdcd;
+		color: #fff;
+		cursor: not-allowed;
+	}
+	.addButton {
+		display: none; // этот вариант: другой экран
+	}
+}
